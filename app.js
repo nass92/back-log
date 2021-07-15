@@ -1,42 +1,11 @@
-var createError = require('http-errors');
+
 var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+
 var cors = require("cors");
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+
 
 var app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
 
 // Our user database
 const db_user = {
@@ -52,7 +21,7 @@ const userChecker = (req, res, next) => {
   if (db_user.hasOwnProperty(username)) {
     next()
   } else {
-    res.send('Username or Password invalid.')
+    res.send('Username  invalid.')
   }
 }
 
@@ -60,10 +29,10 @@ const userChecker = (req, res, next) => {
 const passwordChecker = (req, res, next) => {
   const username = req.body.username
   const password = req.body.password
-  if (db_user[username] === password) {
+  if (db_user[username].password === password) {
     next()
   } else {
-    res.send('Username or password invalid.')
+    res.send(' Password invalid.')
   }
 }
 
@@ -92,9 +61,9 @@ app.post('/register', (req, res) => {
   let username = req.body.username
   let email = req.body.email
   let password = req.body.password
-  db_user[username] = {password, email}
+  db_user[username] = {username, password, email}
   console.log(db_user)
-  
+  console.log(req.body)
   res.send("Registration success !")
 })
 
