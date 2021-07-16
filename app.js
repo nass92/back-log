@@ -9,9 +9,7 @@ var app = express();
 
 // Our user database
 const db_user = {
-  alice: '123',
-  bob: '456',
-  charlie: '789',
+  alice: {username: 'alice', password: '123', email : 'alice@hotmail.com'}
 }
 
 // Middleware for checking if user exists
